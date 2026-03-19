@@ -1,22 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_achievement_tracker.py                          :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: helaouta <helaouta@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/03/16 14:16:53 by helaouta          #+#    #+#              #
-#    Updated: 2026/03/16 14:35:56 by helaouta         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-
 # This exercise requires the use of sets to store unique achievements
 # ! and set operations (union, intersection, difference) to analyze
 # achievement collections across players.
-
 # ! double check if bitwise is allowed
-
 if __name__ == "__main__":
     print("=== Achievement Tracker System ===")
 

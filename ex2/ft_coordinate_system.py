@@ -1,22 +1,7 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    ft_coordinate_system.py                            :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: helaouta <helaouta@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/03/16 14:11:30 by helaouta          #+#    #+#              #
-#    Updated: 2026/03/16 14:14:06 by helaouta         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-
-
 import sys
 import math
 
 # ! check erros handling messages. 
-
 def validate_int(n: str) -> int:
     try:
         return int(n)
@@ -102,17 +87,3 @@ if __name__ == "__main__":
             print(
                 f"Error details - Type: {type(e).__name__}, Args: {e.args}"
             )
-
-# $> python3 ft_coordinate_system.py
-# === Game Coordinate System ===
-# Position created: (10, 20, 5)
-# Distance between (0, 0, 0) and (10, 20, 5): 22.91
-# Parsing coordinates: "3,4,0"
-# Parsed position: (3, 4, 0)
-# Distance between (0, 0, 0) and (3, 4, 0): 5.0
-# Parsing invalid coordinates: "abc,def,ghi"
-# Error parsing coordinates: invalid literal for int() with base 10: 'abc'
-# Error details - Type: ValueError, Args: ("invalid literal for int() with base 10: 'abc'",)
-# Unpacking demonstration:
-# Player at x=3, y=4, z=0
-# Coordinates: X=3, Y=4, Z=0
