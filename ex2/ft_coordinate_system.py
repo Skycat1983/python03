@@ -1,7 +1,7 @@
 import sys
 import math
 
-# ! check erros handling messages. 
+
 def validate_int(n: str) -> int:
     try:
         return int(n)
