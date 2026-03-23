@@ -1,11 +1,14 @@
 import sys
 # ? should this be rounding decimals?
 # ? should i print the error or raise it?
+
+
 def validate_int(n: str) -> int:
     try:
         return int(n)
     except ValueError:
         raise ValueError(f"Value {n} is not an int")
+
 
 # ? should i use 'try' here too?
 if __name__ == "__main__":

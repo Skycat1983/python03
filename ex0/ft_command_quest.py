@@ -1,6 +1,7 @@
 import sys
 
-def print_value(label: str, value) -> None:
+
+def print_value(label: str, value: str) -> None:
     print(f"{label.title()}: {value}")
 
 
