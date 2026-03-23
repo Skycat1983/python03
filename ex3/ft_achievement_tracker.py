@@ -1,47 +1,87 @@
-# This exercise requires the use of sets to store unique achievements
-# ! and set operations (union, intersection, difference) to analyze
-# achievement collections across players.
-# ! double check if bitwise is allowed
+# This exercise requires the use of sets to store unique achievements and perform operations
+# (union, intersection, difference) to analyze achievement collections across players.
+
+# Create a function gen_player_achievements() that will use a large fixed list of achieve-
+# ments to randomly assign a set to a player. Choose a random number of achievements,
+# then pick this number of achievements from the list to build and return the set.
+
+# Authorized: len(), print(), import random, random.*, set(), set.union(),
+# set.intersection(), set.difference()
+import random
+
+
+def gen_player_achievements(a_list: list[str]) -> set:
+    num = random.randrange(len(a_list) + 1)
+    a_set = set()
+    while (len(a_set) < num):
+        r_a = random.choice(a_list)
+        a_set.add(r_a)
+    return (a_set)
+
+
+def gen_players(p_list: list[str], num: int) -> set:
+    p_set = set()
+    while (len(p_set) < num):
+        r_p = random.choice(p_list)
+        p_set.add(r_p)
+    return (p_set)
+
+
 if __name__ == "__main__":
     print("=== Achievement Tracker System ===")
+    names: list[str] = ["Alice", "Bob", "Charlie", "Dylan", "Eve", "Fi", "Geb"]
+    achievements: list[str] = [
+        "Crafting Genius",
+        "Strategist",
+        "World Savior",
+        "Speed Runner",
+        "Survivor",
+        "Master Explorer",
+        "Treasure Hunter",
+        "Unstoppable",
+        "First Steps",
+        "Collector Supreme",
+        "Untouchable",
+        "Sharp Mind",
+        "Boss Slayer",
+        "Hidden Path Finder"
+    ]
+    players = gen_players(names, 4)
+    player_achievements = {}
 
-    alice = {"first_kill", "level_10", "treasure_hunter", "speed_demon"}
-    bob = {"first_kill", "level_10", "boss_slayer", "collector"}
-    charlie = {
-        "level_10",
-        "treasure_hunter",
-        "boss_slayer",
-        "speed_demon",
-        "perfectionist",
-    }
+    for player in players:
+        player_achievements[player] = gen_player_achievements(achievements)
+        print(f"Player {player}: {player_achievements[player]}")
 
-    print(f"Player alice achievements: {alice}")
-    print(f"Player bob achievements: {bob}")
-    print(f"Player charlie achievements: {charlie}")
+    unique_achievements = set(achievements)
+    print()
+    print(f"All distincet achievements: {unique_achievements}")
+    common_achievements = None
 
-    print("=== Achievement Analytics ===")
+    for player in player_achievements:
+        if common_achievements is None:
+            common_achievements = player_achievements[player]
+        else:
+            common_achievements = set.intersection(
+                common_achievements,
+                player_achievements[player]
+            )
+    print()
+    print(f"Common achievements: {common_achievements}\n")
+    all_achievements = set()
+    for player in player_achievements:
+        all_achievements = set.union(all_achievements, player_achievements[player])
 
-    all_achievements = alice.union(bob).union(charlie)
-    print(f"All unique achievements: {all_achievements}")
-    print(f"Total unique achievements: {len(all_achievements)}")
+    for player in player_achievements:
+        other_union = set()
+        for other_player in player_achievements:
+            if other_player != player:
+                other_union = set.union(other_union, player_achievements[other_player])
+        only_player = set.difference(player_achievements[player], other_union)
+        print(f"Only {player} has: {only_player}")
 
-    common_all = alice.intersection(bob).intersection(charlie)
-    print(f"Common to all players: {common_all}")
+    print()
 
-    shared_by_at_least_two = (
-        alice.intersection(bob)
-        .union(alice.intersection(charlie))
-        .union(bob.intersection(charlie))
-    )
-
-    rare = all_achievements.difference(shared_by_at_least_two)
-    print(f"Rare achievements (1 player): {rare}")
-
-    alice_bob_common = alice.intersection(bob)
-    print(f"Alice vs Bob common: {alice_bob_common}")
-
-    alice_unique = alice.difference(bob)
-    print(f"Alice unique: {alice_unique}")
-
-    bob_unique = bob.difference(alice)
-    print(f"Bob unique: {bob_unique}")
+    for player in player_achievements:
+        missing = set.difference(all_achievements, player_achievements[player])
+        print(f"{player} is missing: {missing}")
