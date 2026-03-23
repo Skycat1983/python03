@@ -30,7 +30,8 @@ def gen_event(names: list[str], actions: list[str]) -> Generator[tuple[str, str]
 def consume_event(events: list[tuple[str, str]]) -> Generator[tuple[str, str], None, None]:
     while events:
         idx = random.randrange(len(events))
-        yield events.pop(idx)  
+        yield events.pop(idx)
+
 
 if __name__ == "__main__":
     print("=== Game Data Stream Processor ===")
@@ -51,6 +52,8 @@ if __name__ == "__main__":
         ten_tuples.append(next(event_gen))
 
     print(f"Built list of 10 events: {ten_tuples}")
-
+    event_consume: Generator[tuple[str, str], None, None] = consume_event(ten_tuples)
     for i in range(10):
-        
+        event = next(event_consume)
+        print(f"Got event from list {event}")
+        print(f"Remains in list: {ten_tuples}")
