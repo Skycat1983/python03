@@ -2,7 +2,7 @@ import sys
 
 
 def print_value(label: str, value: str) -> None:
-    print(f"{label.title()}: {value}")
+    print(f"{label.capitalize()}: {value}")
 
 
 if __name__ == "__main__":

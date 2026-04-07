@@ -1,89 +1,54 @@
-import sys
 import math
 
 
-def validate_int(n: str) -> int:
-    try:
-        return int(n)
-    except ValueError:
-        raise ValueError(f"Value {n} is not an int")
+def calc_distance(
+    first: tuple[float, float, float],
+    second: tuple[float, float, float]
+) -> float:
+    x1, y1, z1 = first
+    x2, y2, z2 = second
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
 
 
-def parse_str(string: str) -> tuple[int, int, int]:
-    parts = string.split(",")
+def parse_coordinates(raw: str) -> tuple[float, float, float]:
+    parts = raw.split(",")
 
     if len(parts) != 3:
-        raise ValueError("Coordinates must contain exactly 3 values")
+        raise ValueError("Invalid syntax")
 
-    try:
-        x = int(parts[0])
-        y = int(parts[1])
-        z = int(parts[2])
-    except ValueError:
-        raise ValueError("Coordinates must be integers")
+    coords: list[float] = []
+    for part in parts:
+        stripped = part.strip()
+        try:
+            coords.append(float(stripped))
+        except ValueError as error:
+            raise ValueError(
+                f"Error on parameter '{stripped}': {error}"
+            ) from error
 
-    return (x, y, z)
+    return coords[0], coords[1], coords[2]
 
 
-def calc_distance(
-    abc: tuple[int, int, int],
-    xyz: tuple[int, int, int]
-) -> float:
-    a, b, c = abc
-    x, y, z = xyz
-    return math.sqrt((x - a) ** 2 + (y - b) ** 2 + (z - c) ** 2)
+def get_player_pos() -> tuple[float, float, float]:
+    while True:
+        raw = input("Enter new coordinates as floats in format 'x,y,z': ")
+        try:
+            return parse_coordinates(raw)
+        except ValueError as error:
+            print(error)
 
 
 if __name__ == "__main__":
     print("=== Game Coordinate System ===")
+    print("Get a first set of coordinates")
+    first = get_player_pos()
+    print(f"Got a first tuple: {first}")
+    print(f"It includes: X={first[0]}, Y={first[1]}, Z={first[2]}")
+    print(f"Distance to center: {round(calc_distance((0, 0, 0), first), 4)}")
 
-    argc = len(sys.argv)
-
-    if argc == 1:
-        abc = (0, 0, 0)
-        xyz = (10, 20, 5)
-        distance = calc_distance(abc, xyz)
-
-        print(f"\nPosition created: {xyz}")
-        print(f"Distance between {abc} and {xyz}: {distance:.2f}")
-
-        print('\nParsing coordinates: "3,4,0"')
-        parsed = parse_str("3,4,0")
-        parsed_distance = calc_distance(abc, parsed)
-        print(f"Parsed position: {parsed}")
-        print(f"Distance between {abc} and {parsed}: {parsed_distance}")
-
-        print('\nParsing invalid coordinates: "abc,def,ghi"')
-        try:
-            invalid = parse_str("abc,def,ghi")
-            print(f"Parsed position: {invalid}")
-        except ValueError as e:
-            print(f"Error parsing coordinates: {e}")
-            print(
-                f"Error details - Type: {type(e).__name__}, Args: {e.args}"
-            )
-
-        print("\nUnpacking demonstration:")
-        x, y, z = parsed
-        print(f"Player at x={x}, y={y}, z={z}")
-        print(f"Coordinates: X={x}, Y={y}, Z={z}")
-
-    else:
-        try:
-            parsed = parse_str(sys.argv[1])
-            origin = (0, 0, 0)
-            distance = calc_distance(origin, parsed)
-
-            print(f"Parsed position: {parsed}")
-            print(f"Distance between {origin} and {parsed}: {distance}")
-
-            print("Unpacking demonstration:")
-            x, y, z = parsed
-            print(f"Player at x={x}, y={y}, z={z}")
-            print(f"Coordinates: X={x}, Y={y}, Z={z}")
-
-        except ValueError as e:
-            print(f"Error parsing coordinates: {e}")
-            print(
-                f"Error details - Type: {type(e).__name__}, Args: {e.args}"
-            )
+    print("Get a second set of coordinates")
+    second = get_player_pos()
+    print(
+        "Distance between the 2 sets of coordinates: "
+        f"{round(calc_distance(first, second), 4)}"
+    )

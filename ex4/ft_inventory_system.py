@@ -1,114 +1,64 @@
-# This exercise requires the use of dictionaries to store inventory
-# data with nested structures (items containing name, type, quantity,
-# value). You must use dict methods like keys(), values(), items(),
-# get(), and update() to manage the inventory.
+import sys
+
+
 if __name__ == "__main__":
     print("=== Inventory System Analysis ===")
 
-    inventory: dict[str, dict[str, int | str]] = {
+    inventory: dict[str, int] = {}
 
-        "potion": {
-            "name": "potion",
-            "type": "consumable",
-            "quantity": 5,
-            "value": 10,
-        },
-        "armor": {
-            "name": "armor",
-            "type": "armor",
-            "quantity": 3,
-            "value": 80,
-        },
-        "shield": {
-            "name": "shield",
-            "type": "armor",
-            "quantity": 2,
-            "value": 40,
-        },
-        "sword": {
-            "name": "sword",
-            "type": "weapon",
-            "quantity": 1,
-            "value": 50,
-        },
-        "helmet": {
-            "name": "helmet",
-            "type": "armor",
-            "quantity": 1,
-            "value": 25,
-        },
-    }
+    for parameter in sys.argv[1:]:
+        parts = parameter.split(":")
 
-    total_items = 0
-    for item in inventory.values():
-        total_items += item["quantity"]
+        if len(parts) != 2 or not parts[0] or not parts[1]:
+            print(f"Error - invalid parameter '{parameter}'")
+            continue
 
-    print(f"Total items in inventory: {total_items}")
-    unique_item_types = len(inventory.keys())
-    print(f"Unique item types: {unique_item_types}")
-    print("\n=== Current Inventory ===")
+        item_name, quantity_text = parts
 
-    for name, item in inventory.items():
-        quantity = item["quantity"]
-        percent = quantity / total_items * 100
+        if item_name in inventory:
+            print(f"Redundant item '{item_name}' - discarding")
+            continue
 
-        unit = "unit" if quantity == 1 else "units"
+        try:
+            quantity = int(quantity_text)
+        except ValueError as error:
+            print(f"Quantity error for '{item_name}': {error}")
+            continue
 
-        print(f"{name}: {quantity} {unit} ({percent:.1f}%)")
+        inventory[item_name] = quantity
 
-    print("\n=== Inventory Statistics ===")
+    print(f"Got inventory: {inventory}")
+    print(f"Item list: {list(inventory.keys())}")
+
+    total_quantity = sum(inventory.values())
+    print(f"Total quantity of the {len(inventory)} items: {total_quantity}")
+
+    for item_name, quantity in inventory.items():
+        percent = round(quantity / total_quantity * 100, 1)
+        print(f"Item {item_name} represents {percent}%")
 
     most_name = ""
-    most_qty = -1
-
+    most_quantity = -1
     least_name = ""
-    least_qty = float("inf")
+    least_quantity = 0
 
-    for name, item in inventory.items():
-        quantity = item["quantity"]
+    for item_name, quantity in inventory.items():
+        if quantity > most_quantity:
+            most_name = item_name
+            most_quantity = quantity
 
-        if quantity > most_qty:
-            most_qty = quantity
-            most_name = name
+        if least_name == "" or quantity < least_quantity:
+            least_name = item_name
+            least_quantity = quantity
 
-        if quantity < least_qty:
-            least_qty = quantity
-            least_name = name
+    print(
+        f"Item most abundant: {most_name} "
+        f"with quantity {most_quantity}"
+    )
+    print(
+        f"Item least abundant: {least_name} "
+        f"with quantity {least_quantity}"
+    )
 
-    print(f"Most abundant: {most_name} ({most_qty} units)")
-    print(f"Least abundant: {least_name} ({least_qty} units)")
-    print("\n=== Item Categories ===")
-
-    categories: dict[str, dict[str, int]] = {
-        "Moderate": {},
-        "Scarce": {},
-    }
-
-    for name, item in inventory.items():
-        quantity = item["quantity"]
-
-        if quantity >= 5:
-            categories["Moderate"][name] = quantity
-        else:
-            categories["Scarce"][name] = quantity
-
-    print(f"Moderate: {categories['Moderate']}")
-    print(f"Scarce: {categories['Scarce']}")
-    print("\n=== Management Suggestions ===")
-
-    restock = []
-
-    for name, item in inventory.items():
-        if item["quantity"] <= 1:
-            restock.append(name)
-
-    print(f"Restock needed: {', '.join(restock)}")
-    print("\n=== Dictionary Properties Demo ===")
-
-    keys = ", ".join(inventory.keys())
-    print(f"Dictionary keys: {keys}")
-
-    values = ", ".join(str(item["quantity"]) for item in inventory.values())
-    print(f"Dictionary values: {values}")
-
-    print(f"Sample lookup - 'sword' in inventory: {'sword' in inventory}")
+    inventory.update({"magic_item": 1})
+    print(f"Updated inventory: {inventory}")
